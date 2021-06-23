@@ -1,27 +1,57 @@
-# TestApp
+# Currency Exchange Micro Service - H2
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.
+Run com.in28minutes.microservices.currencyconversionservice.CurrencyConversionServiceApplicationH2 as a Java Application.
 
-## Development server
+## Resources
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- http://localhost:8000/currency-exchange/from/USD/to/INR
 
-## Code scaffolding
+```json
+{
+  "id": 10001,
+  "from": "USD",
+  "to": "INR",
+  "conversionMultiple": 65.00,
+  "environmentInfo": "NA"
+}
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## H2 Console
 
-## Build
+- http://localhost:8000/h2-console
+- Use `jdbc:h2:mem:testdb` as JDBC URL
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+## Notes
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Tables Created
+```
+create table exchange_value 
+(
+	id bigint not null, 
+	conversion_multiple decimal(19,2), 
+	currency_from varchar(255), 
+	currency_to varchar(255), 
+	primary key (id)
+)
+```
 
-## Running end-to-end tests
+## Containerization
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Troubleshooting
 
-## Further help
+- Problem - Caused by: com.spotify.docker.client.shaded.javax.ws.rs.ProcessingException: java.io.IOException: No such file or directory
+- Solution - Check if docker is up and running!
+- Problem - Error creating the Docker image on MacOS - java.io.IOException: Cannot run program “docker-credential-osxkeychain”: error=2, No such file or directory
+- Solution - https://medium.com/@dakshika/error-creating-the-docker-image-on-macos-wso2-enterprise-integrator-tooling-dfb5b537b44e
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Creating Container
+
+- mvn package
+
+### Running Container
+
+#### Basic
+```
+docker container run --publish 8000:8000 in28min/currency-exchange:0.0.1-SNAPSHOT
+```
